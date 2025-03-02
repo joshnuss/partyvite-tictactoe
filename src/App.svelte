@@ -1,53 +1,6 @@
 <script lang="ts">
-  import PartySocket from 'partysocket'
   import { onMount } from 'svelte'
-
-  type Player = 'x' | 'o'
-  type Row = [ Player | null, Player | null, Player | null]
-
-  class Game {
-    private socket: PartySocket
-
-    state = $state()
-    cells = $state<[Row, Row, Row]>()
-    player = $state()
-
-    constructor(player: string | null) {
-      this.socket = new PartySocket({
-        host: window.location.host,
-        room: 'room1',
-        party: 'my-server',
-        id: player || 'anonymous'
-      })
-
-      this.socket.addEventListener('message', (event) => this.onMessage(event))
-    }
-
-    play({x, y}: { x: number, y: number }) {
-      this.send({
-        type: 'play',
-        player: this.player,
-        x,
-        y
-      })
-    }
-
-    reset() {
-      this.send({ type: 'reset' })
-    }
-
-    private send(message: unknown) {
-      const payload = JSON.stringify(message)
-      this.socket.send(payload)
-    }
-
-    private onMessage(event: MessageEvent) {
-      const { cells, state } = JSON.parse(event.data)
-
-      this.state = state
-      this.cells = cells
-    }
-  }
+  import { Game } from './game.svelte'
 
   const url = new URL(window.location.href)
   const player = url.searchParams.get('player')
