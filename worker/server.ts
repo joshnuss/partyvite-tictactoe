@@ -1,14 +1,43 @@
 import { Server, type Connection, routePartykitRequest } from "partyserver"
+import { Game } from './game.ts'
 
 type Env = {
   MyServer: DurableObjectNamespace<MyServer>
 }
 
 export class MyServer extends Server<Env> {
-  onMessage(conn: Connection, message: string) {
-    console.log("message from client:", message)
+  private game = new Game()
 
-    conn.send('hello from server')
+  onStart() {
+    console.log(this.ctx.storage)
+    this.game.subscribe((game) => {
+      const payload = JSON.stringify({
+        state: game.state,
+        cells: game.cells
+      })
+      this.broadcast(payload)
+    })
+  }
+
+  onConnect(conn: Connection) {
+    const message = JSON.stringify({
+      state: this.game.state,
+      cells: this.game.cells
+    })
+    conn.send(message)
+  }
+
+  onMessage(conn: Connection, payload: string) {
+    const message = JSON.parse(payload)
+    console.log(message)
+
+    this.game.play(conn.id, message)
+    console.log(this.game.state)
+    
+  }
+
+  onError(conn, error) {
+    console.error(error)
   }
 }
 
