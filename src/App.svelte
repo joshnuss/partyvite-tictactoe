@@ -5,10 +5,6 @@
   const url = new URL(window.location.href)
   const player = url.searchParams.get('player')
   const game = new Game(player)
-
-  function play({ x, y }: {x: number, y: number}) {
-    game.play({ x, y })
-  }
 </script>
 
 <header>
@@ -18,7 +14,7 @@
   {#if game.cells}
     {#each { length: 3 }, y}
       {#each { length: 3 }, x}
-        <button onclick={() => play({x, y})}>
+        <button onclick={() => game.play({x, y})}>
           <svg viewBox="0 0 10 10">
             {#if game.cells[y][x]}
               {#if game.cells[y][x] == 'x'}
