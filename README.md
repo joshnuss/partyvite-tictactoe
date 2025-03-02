@@ -1,16 +1,18 @@
 Tic-Tac-Toe
 ------------
 
-Quick & dirty multi-player Tic-Tac-Toe with PartyServer CloudFlare Durable Objects + Svelte.
+A multi-player Tic-Tac-Toe game using PartyServer + CloudFlare Durable Objects + Svelte.
 
 ## Usage
 
-Add the player id to the URL:
+The game does not have any authentication.
 
-http://localhost:5173?player=x
-http://localhost:5173?player=o
+To choose the player, pass `player` in the URL as a query string:
 
-Otherwise the session is in read-only mode, where the user can view the game, but cannot perform moves.
+- http://localhost:5173?player=x
+- http://localhost:5173?player=o
+
+Without the `player` param, the session is in read-only mode, where the user can view the game, but cannot perform moves.
 
 ## License
 
