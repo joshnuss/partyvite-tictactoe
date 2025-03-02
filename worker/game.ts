@@ -16,8 +16,8 @@ type TiedState = {
 type WonState = {
   status: 'won'
   style:
-    { type: 'x', x: number } |
-    { type: 'y', y: number } |
+    { type: 'column', column: number } |
+    { type: 'row', row: number } |
     { type: 'slash' } |
     { type: 'backslash' }
   winner: Player
@@ -93,7 +93,7 @@ export class Game {
       if (this.cells[y].every((cell) => cell == player)) {
         this.state = {
           status: 'won',
-          style: { type: 'y', y },
+          style: { type: 'row', row: y },
           winner: player
         }
         return true
@@ -110,7 +110,7 @@ export class Game {
       if (cells.every((cell) => cell == player)) {
         this.state = {
           status: 'won',
-          style: { type: 'x', x },
+          style: { type: 'column', column: x },
           winner: player
         }
         return true
