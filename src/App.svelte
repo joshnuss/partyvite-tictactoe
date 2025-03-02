@@ -2,25 +2,28 @@
   import PartySocket from 'partysocket'
   import { onMount } from 'svelte'
 
+  type Player = 'x' | 'o'
+  type Row = [ Player | null, Player | null, Player | null]
+
   class Game {
     private socket: PartySocket
 
     state = $state()
-    cells = $state()
+    cells = $state<[Row, Row, Row]>()
     player = $state()
 
-    constructor(player: 'x' | 'o') {
+    constructor(player: string | null) {
       this.socket = new PartySocket({
         host: window.location.host,
         room: 'room1',
         party: 'my-server',
-        id: player
+        id: player || 'anonymous'
       })
 
       this.socket.addEventListener('message', (event) => this.onMessage(event))
     }
 
-    play({x, y}) {
+    play({x, y}: { x: number, y: number }) {
       this.send({
         type: 'play',
         player: this.player,
@@ -39,7 +42,6 @@
     }
 
     private onMessage(event: MessageEvent) {
-    console.log(event.data)
       const { cells, state } = JSON.parse(event.data)
 
       this.state = state
@@ -51,9 +53,7 @@
   const player = url.searchParams.get('player')
   const game = new Game(player)
 
-  function play({ x, y }) {
-    console.log({ x, y })
-
+  function play({ x, y }: {x: number, y: number}) {
     game.play({ x, y })
   }
 </script>

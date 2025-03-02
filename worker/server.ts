@@ -29,14 +29,16 @@ export class MyServer extends Server<Env> {
 
   onMessage(conn: Connection, payload: string) {
     const message = JSON.parse(payload)
-    console.log(message)
+
+    if (conn.id != 'x' && conn.id != 'o') {
+      throw Error('Only active players can make moves')
+    }
 
     this.game.play(conn.id, message)
-    console.log(this.game.state)
-    
+
   }
 
-  onError(conn, error) {
+  onError(conn: Connection, error: Error) {
     console.error(error)
   }
 }
