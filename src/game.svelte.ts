@@ -22,12 +22,7 @@ export class Game {
   }
 
   play({x, y}: { x: number, y: number }) {
-    this.send({
-      type: 'play',
-      player: this.player,
-      x,
-      y
-    })
+    this.send({ type: 'play', x, y })
   }
 
   reset() {

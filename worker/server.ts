@@ -35,7 +35,6 @@ export class MyServer extends Server<Env> {
     }
 
     this.game.play(conn.id, message)
-
   }
 
   onError(conn: Connection, error: Error) {
